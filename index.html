@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vinted Tracker</title>
+    <style>
+        :root {
+            --primary: #007782; /* Colore tipico Vinted */
+            --bg: #f4f4f4;
+            --white: #ffffff;
+        }
+
+        body { font-family: sans-serif; background-color: var(--bg); margin: 0; padding: 20px; }
+        
+        .container { max-width: 800px; margin: auto; }
+
+        /* Dashboard statistiche */
+        .stats { display: flex; gap: 20px; margin-bottom: 20px; }
+        .stat-card { 
+            background: var(--white); padding: 20px; flex: 1; 
+            border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center;
+        }
+
+        /* Modulo inserimento */
+        .form-box { 
+            background: var(--white); padding: 20px; border-radius: 10px; 
+            margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        input, select, button { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        button { background: var(--primary); color: white; border: none; cursor: pointer; font-weight: bold; }
+
+        /* Lista prodotti */
+        .product-list { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .product-card { 
+            background: var(--white); padding: 15px; border-radius: 10px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: relative;
+        }
+        .status-badge { display: inline-block; padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+        .status-queue { background: #eee; }
+        .status-sold { background: #d4edda; color: #155724; }
+
+        .price { font-size: 1.2rem; color: var(--primary); font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Il mio Vinted Tracker</h1>
+
+    <div class="stats">
+        <div class="stat-card">
+            <h3>Guadagno Aprile</h3>
+            <p id="total-earnings">€ 0.00</p>
+        </div>
+        <div class="stat-card">
+            <h3>In Coda</h3>
+            <p id="pending-count">0</p>
+        </div>
+    </div>
+
+    <div class="form-box">
+        <h3>Aggiungi Prodotto</h3>
+        <input type="text" id="prod-name" placeholder="Nome prodotto (es. Felpa Nike)">
+        <input type="number" id="prod-price" placeholder="Prezzo (€)">
+        <button onclick="addProduct()">Aggiungi alla lista</button>
+    </div>
+
+    <div class="product-list" id="product-list">
+        </div>
+</div>
+
+<script>
+    // Qui aggiungeremo la logica JavaScript nel prossimo step
+</script>
+
+</body>
+</html>
