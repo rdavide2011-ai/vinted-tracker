@@ -241,6 +241,83 @@
     overflow-x:auto;
   }
 
+  /* ===== MOBILE: tabella -> card ===== */
+  @media (max-width: 680px){
+    .table-scroll{ overflow-x: visible; }
+
+    table{ border:0; }
+    thead{ display:none; }
+
+    tbody tr{
+      display:grid;
+      grid-template-columns: 56px 1fr auto;
+      grid-template-areas:
+        "img name actions"
+        "img acquisto acquisto"
+        "img vendita vendita"
+        "img profitto profitto"
+        "img data data";
+      gap: 4px 12px;
+      background: #fff;
+      border: 1px solid #eef1f4;
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow);
+    }
+    tbody tr:hover{ background:#fff; }
+
+    tbody td{
+      border-bottom:none;
+      padding: 2px 0;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      font-size: 14px;
+    }
+
+    /* colonne per area */
+    td[data-col="img"]{ grid-area: img; justify-content:center; align-items:flex-start; }
+    td[data-col="nome"]{ grid-area: name; font-weight:700; font-size:15px; }
+    td[data-col="acquisto"]{ grid-area: acquisto; }
+    td[data-col="vendita"]{ grid-area: vendita; }
+    td[data-col="profitto"]{ grid-area: profitto; }
+    td[data-col="data"]{ grid-area: data; }
+    td[data-col="actions"]{ grid-area: actions; justify-content:flex-end; }
+
+    /* etichette descrittive prima del valore */
+    td[data-col="acquisto"]::before,
+    td[data-col="vendita"]::before,
+    td[data-col="profitto"]::before,
+    td[data-col="data"]::before{
+      content: attr(data-label);
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight:600;
+    }
+
+    .prod-img, .prod-img-placeholder{
+      width:48px; height:48px;
+    }
+
+    .actions{ gap:8px; }
+    .actions .btn-small{
+      padding: 8px 10px;
+      font-size: 14px;
+    }
+  }
+
+  /* ===== TABLET / DESKTOP: header e card più larghi ===== */
+  @media (min-width: 681px) and (max-width: 1099px){
+    .stats-grid{ grid-template-columns: repeat(4, 1fr); }
+    .form-grid{ grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 1100px){
+    .container{ padding: 0 24px; }
+    header h1{ font-size: 28px; }
+    .stat-card .value{ font-size: 24px; }
+  }
+
   /* Modal */
   .modal-overlay{
     position:fixed; inset:0;
@@ -633,17 +710,19 @@ function renderTable(){
   filtered.forEach(item => {
     const profitClass = (Number(item.profitto) >= 0) ? "profit-pos" : "profit-neg";
     const imgHtml = item.foto_url
-      ? `<img src="${item.foto_url}" class="prod-img" alt="" onerror="this.style.display='none'">`
-      : `<div class="prod-img" style="display:flex;align-items:center;justify-content:center;font-size:16px;">📦</div>`;
+      ? `<img src="${item.foto_url}" class="prod-img" alt="" onerror="this.outerHTML='<div class=&quot;prod-img-placeholder&quot; style=&quot;width:40px;height:40px;border-radius:8px;background:#eef1f4;display:flex;align-items:center;justify-content:center;font-size:16px;&quot;>📦</div>'">`
+      : `<div class="prod-img-placeholder" style="width:40px;height:40px;border-radius:8px;background:#eef1f4;display:flex;align-items:center;justify-content:center;font-size:16px;">📦</div>`;
+
+    const acquistoVal = (item.prezzo_acquisto !== null && item.prezzo_acquisto !== undefined) ? formatEuro(item.prezzo_acquisto) : "-";
 
     html += `<tr>
-      <td>${imgHtml}</td>
-      <td>${escapeHtml(item.nome_prodotto)}</td>
-      <td>${item.prezzo_acquisto !== null && item.prezzo_acquisto !== undefined ? formatEuro(item.prezzo_acquisto) : "-"}</td>
-      <td>${formatEuro(item.prezzo_vendita)}</td>
-      <td class="${profitClass}">${formatEuro(item.profitto)}</td>
-      <td>${formatDate(item.data_vendita)}</td>
-      <td class="actions">
+      <td data-col="img">${imgHtml}</td>
+      <td data-col="nome">${escapeHtml(item.nome_prodotto)}</td>
+      <td data-col="acquisto" data-label="Acquisto">${acquistoVal}</td>
+      <td data-col="vendita" data-label="Vendita">${formatEuro(item.prezzo_vendita)}</td>
+      <td data-col="profitto" data-label="Profitto" class="${profitClass}">${formatEuro(item.profitto)}</td>
+      <td data-col="data" data-label="Data">${formatDate(item.data_vendita)}</td>
+      <td data-col="actions" class="actions">
         <button class="btn btn-secondary btn-small" onclick="openEdit('${item.id}')">✏️</button>
         <button class="btn btn-danger btn-small" onclick="openDelete('${item.id}')">🗑️</button>
       </td>
